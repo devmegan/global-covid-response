@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $("#dd").on('change',function(){
-        var countryCode=$("#dd").val();
-        var countryName=$("#dd option:selected").text();
+        var countryCode=$("#countrySelect").val();
+        var countryName=$("#countrySelect option:selected").text();
         getOxCGRTData(countryCode, countryName);
     });
 });
