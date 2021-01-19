@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $("#dd").on('change',function(){
+    $("#countrySelect").on('change',function(){
         var countryCode=$("#countrySelect").val();
         var countryName=$("#countrySelect option:selected").text();
         getOxCGRTData(countryCode, countryName);
@@ -8,8 +8,21 @@ $(document).ready(function(){
 
 //function calls country data from oxCGRT API
 function getOxCGRTData(countryCode, countryName) {
+    var dateToday = new Date();
+    var dateYesterday = new Date();
+    dateYesterday.setDate(dateToday.getDate() - 1);
+
+    var year = dateYesterday.getFullYear();
+    var month = dateYesterday.getMonth() + 1
+    if (month < 10) {
+        month = '0' + month;
+    }
+    var day = dateYesterday.getDate();
+    if (day < 10) 
+        day = '0' + day 
+    
     var xhr = new XMLHttpRequest();
-    var url = `https://covidtrackerapi.bsg.ox.ac.uk/api/v2/stringency/actions/${countryCode}/2021-01-10`;
+    var url = `https://covidtrackerapi.bsg.ox.ac.uk/api/v2/stringency/actions/${countryCode}/${year}-${month}-${day}`;
 
     xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
