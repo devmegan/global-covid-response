@@ -199,6 +199,34 @@
                     </div>
                 </div>
             </header>
+            <section class="data">
+                <div class="container">
+                    <div class="row no-gutters">
+                        <div class="col-12">
+                            <h4 id="countryCode"></h4>
+                            <p id="deaths" class="lead data-required"><span id="deathsInt"></span> recorded deaths</p>
+                            <p id="confirmed" class="lead data-required"><span id="confirmedInt"></span> positive cases</p>
+                        </div>
+                        <div class="col-12 col-md-6 data-required">
+                            <h6>Economic Responses</h6>
+                            <ul id="economic-response-data">
+                            </ul>
+                            <h6>Health Responses</h6>
+                            <ul id="health-response-data">
+                            </ul>
+                            <h6>Travel Responses</h6>
+                            <ul id="travel-response-data">
+                            </ul>
+                            <h6>Other Responses</h6>
+                            <ul id="other-response-data">
+                            </ul> 
+                        </div>
+                        <div class="col-12 col-md-6 no-data-available d-none">
+                            <p class="lead text-danger">No Data Available</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <!-- jQuery, Popper.js, Bootstrap JS -->
             <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
