@@ -1,16 +1,19 @@
 $(document).ready(function(){
+    countryCode = "GBR"
+    countryName = "United Kingdom"
+    getOxCGRTData(countryCode, countryName, 1);
     $("#countrySelect").on('change',function(){
         var countryCode=$("#countrySelect").val();
         var countryName=$("#countrySelect option:selected").text();
-        getOxCGRTData(countryCode, countryName);
+        getOxCGRTData(countryCode, countryName, 1);
     });
 });
 
 //function calls country data from oxCGRT API
-function getOxCGRTData(countryCode, countryName) {
+function getOxCGRTData(countryCode, countryName, dayDelta) {
     var dateToday = new Date();
     var dateYesterday = new Date();
-    dateYesterday.setDate(dateToday.getDate() - 1);
+    dateYesterday.setDate(dateToday.getDate() - dayDelta);
 
     var year = dateYesterday.getFullYear();
     var month = dateYesterday.getMonth() + 1
@@ -27,15 +30,19 @@ function getOxCGRTData(countryCode, countryName) {
     xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             let oxCGRTResponse = (JSON.parse(this.responseText));
-            console.log(oxCGRTResponse)
-            setResponseData(oxCGRTResponse); 
+            if (oxCGRTResponse.policyActions[0].policy_type_code == "NONE" && dayDelta < 14){ 
+                dayDelta += 1
+                getOxCGRTData(countryCode, countryName, dayDelta);
+            } else {
+                setResponseData(oxCGRTResponse, dayDelta); 
+            }
         }
     };
     xhr.open("GET", url);
     xhr.send();
     $("#countryCode").text(countryName)
 }
-function setResponseData(oxCGRTResponse) {
+function setResponseData(oxCGRTResponse, dayDelta) {
     var i; 
     let economicResponses = ""
     let otherResponses = ""
@@ -45,6 +52,12 @@ function setResponseData(oxCGRTResponse) {
     if (!oxCGRTResponse.stringencyData.msg){
         $(".data-required").show();
         $(".no-data-available").addClass("d-none")
+        if (dayDelta = 1){
+            $(".day-delta").text(dayDelta + " day")
+        } else {
+            $(".day-delta").text(dayDelta + " days")
+        }
+        
         for (i = 0; i < oxCGRTResponse.policyActions.length; i++) {
             if (oxCGRTResponse.policyActions[i].policy_type_code.charAt(0) == "E"){
                 economicResponses += "<li>" + oxCGRTResponse.policyActions[i].policy_type_display + "</li>";

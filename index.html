@@ -21,7 +21,8 @@
                     <div class="container text-white">
                         <h1 class="display-4">Global Covid Response</h1>
                         <h6 class="mb-4"><small>*Data from the Oxford Coronavirus Government Response Tracker</small></h6>
-                        <select id="countrySelect">
+                        <select id="countrySelect" class="custom-select w-25">
+                            <option value="GBR" selected>United Kingdom</option>
                             <option value="AFG">Afghanistan</option>
                             <option value="ALB">Albania</option>
                             <option value="DZA">Algeria</option>
@@ -184,7 +185,6 @@
                             <option value="UGA">Uganda</option>
                             <option value="UKR">Ukraine</option>
                             <option value="ARE">United Arab Emirates</option>
-                            <option value="GBR">United Kingdom</option>
                             <option value="USA">United States</option>
                             <option value="URY">Uruguay</option>
                             <option value="UZB">Uzbekistan</option>
@@ -206,6 +206,7 @@
                             <h4 id="countryCode"></h4>
                             <p id="deaths" class="lead data-required"><span id="deathsInt"></span> recorded deaths</p>
                             <p id="confirmed" class="lead data-required"><span id="confirmedInt"></span> positive cases</p>
+                            <p><small>* data from <span class="day-delta"></span> ago</small></p>
                         </div>
                         <div class="col-12 col-md-6 data-required">
                             <h6>Economic Responses</h6>
