@@ -1,3 +1,3 @@
-# Jan 2021 v1 workspace template 
+# Global Covid Response Tracker
 
-## mvamolloy[at]gmail[dot]com
+## Using the [OxCGRT API](https://covidtracker.bsg.ox.ac.uk/)
