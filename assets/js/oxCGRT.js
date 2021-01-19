@@ -60,14 +60,16 @@ function setResponseData(oxCGRTResponse, dayDelta) {
         }
         
         for (i = 0; i < oxCGRTResponse.policyActions.length; i++) {
-            if (oxCGRTResponse.policyActions[i].policy_type_code.charAt(0) == "E"){
-                economicResponses += "<li>" + oxCGRTResponse.policyActions[i].policy_type_display + "</li>";
-            } else if (oxCGRTResponse.policyActions[i].policy_type_code.charAt(0) == "H"){
-                healthResponses += "<li>" + oxCGRTResponse.policyActions[i].policy_type_display + "</li>";
-            } else if (oxCGRTResponse.policyActions[i].policy_type_code.charAt(0) == "C"){
-                travelResponses += "<li>" + oxCGRTResponse.policyActions[i].policy_type_display + "</li>";
-            } else {
-                otherResponses += "<li>" + oxCGRTResponse.policyActions[i].policy_type_display + "</li>";
+            if (oxCGRTResponse.policyActions[i].policy_value_display_field != "USD Value"){
+                if (oxCGRTResponse.policyActions[i].policy_type_code.charAt(0) == "E"){
+                    economicResponses += "<li>" + oxCGRTResponse.policyActions[i].policy_type_display + ": <small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></li>";
+                } else if (oxCGRTResponse.policyActions[i].policy_type_code.charAt(0) == "H"){
+                    healthResponses += "<li>" + oxCGRTResponse.policyActions[i].policy_type_display + ": <small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></li>";
+                } else if (oxCGRTResponse.policyActions[i].policy_type_code.charAt(0) == "C"){
+                    travelResponses += "<li>" + oxCGRTResponse.policyActions[i].policy_type_display + ": <small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></li>";
+                } else {
+                    otherResponses += "<li>" + oxCGRTResponse.policyActions[i].policy_type_display + ": <small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></li>";
+                }
             }
         }
     } else {
@@ -76,7 +78,7 @@ function setResponseData(oxCGRTResponse, dayDelta) {
         $(".no-data-available").removeClass("d-none")
     }
     $("#economic-response-data").html(economicResponses);
-    $("#health-response-data").html(economicResponses);
+    $("#health-response-data").html(healthResponses);
     $("#travel-response-data").html(travelResponses);
     $("#other-response-data").html(otherResponses);
     $("#deathsInt").text(oxCGRTResponse.stringencyData.deaths)
