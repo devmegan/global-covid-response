@@ -81,6 +81,6 @@ function setResponseData(oxCGRTResponse, dayDelta) {
     $("#health-response-data").html(healthResponses);
     $("#travel-response-data").html(travelResponses);
     $("#other-response-data").html(otherResponses);
-    $("#deathsInt").text(oxCGRTResponse.stringencyData.deaths)
-    $("#confirmedInt").text(oxCGRTResponse.stringencyData.confirmed)
+    $("#deathsInt").text(oxCGRTResponse.stringencyData.deaths.toLocaleString())
+    $("#confirmedInt").text(oxCGRTResponse.stringencyData.confirmed.toLocaleString())
 }
