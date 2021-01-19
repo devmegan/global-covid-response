@@ -14,13 +14,10 @@
         </head>
         <body>
             <header>
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <a class="navbar-brand" href="#">🌎 GLOBAL COVID RESPONSE</a>
-                </nav>
                 <div class="jumbotron jumbotron-fluid">
                     <div class="container text-white">
                         <h1 class="display-4">Global Covid Response</h1>
-                        <h6 class="mb-4"><small>* Data from the <a href="https://covidtracker.bsg.ox.ac.uk/" target="_blank" class="text-white"><u>Oxford Coronavirus Government Response Tracker</u></a></small></h6>
+                        <h6 class="mb-4"><small>🌎  Data from the <a href="https://covidtracker.bsg.ox.ac.uk/" target="_blank" class="text-white"><u>Oxford Coronavirus Government Response Tracker</u></a></small></h6>
                         <select id="countrySelect" class="custom-select w-25">
                             <option value="GBR" selected>United Kingdom</option>
                             <option value="AFG">Afghanistan</option>
@@ -202,27 +199,72 @@
             <section class="data">
                 <div class="container">
                     <div class="row no-gutters">
-                        <div class="col-12">
-                            <h4 id="countryCode"></h4>
-                            <p id="deaths" class="lead data-required"><span id="deathsInt"></span> recorded deaths</p>
-                            <p id="confirmed" class="lead data-required"><span id="confirmedInt"></span> positive cases</p>
-                            <p><small>* data from <span class="day-delta"></span> ago</small></p>
+                        <div class="col-2 border-right">
+                            <h4 id="countryCode" class="text-uppercase mb-0"></h4>
+                            <p class="text-muted"><small>* data from <span class="day-delta"></span> ago</small></p>
+                            <p id="deaths" class="lead data-required"><strong><span id="deathsInt" class="text-danger d-block"></span></strong> recorded deaths</p>
+                            <p id="confirmed" class="lead data-required"><strong><span id="confirmedInt" class="text-info d-block"></span></strong> positive cases</p>
+                            
                         </div>
-                        <div class="col-12 col-md-6 data-required">
-                            <h6>Economic Responses</h6>
-                            <ul id="economic-response-data">
-                            </ul>
-                            <h6>Health Responses</h6>
-                            <ul id="health-response-data">
-                            </ul>
-                            <h6>Travel Responses</h6>
-                            <ul id="travel-response-data">
-                            </ul>
-                            <h6>Other Responses</h6>
-                            <ul id="other-response-data">
-                            </ul> 
+                        <div class="col-10 data-required">
+                            <div class="pl-4">
+                                <div class="row no-gutters">
+                                    <div class="col-12">
+                                        <a class="btn btn-info px-4" data-toggle="collapse" href="#travelRestictionsCard" role="button" aria-expanded="false" aria-controls="multiCollapseExample1"><i class="fas fa-road pr-2"></i> Travel Restrictions</a>
+                                        <button class="btn btn-danger px-4" type="button" data-toggle="collapse" data-target="#healthMeasuresCard" aria-expanded="false" aria-controls="multiCollapseExample2"><i class="fas fa-heartbeat pr-2"></i> Health Measures</button>
+                                        <button class="btn btn-success px-4" type="button" data-toggle="collapse" data-target="#economicSupportCard" aria-expanded="false" aria-controls="economicSupportCard"><i class="fas fa-landmark pr-2"></i> Economic Support</button>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="collapse mt-3" id="travelRestictionsCard">
+                                            <div class="card card-body">
+                                            <h4 class="text-info"><i class="fas fa-road"></i> Travel Restrictions</h4>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div id="travel-required">
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 text-muted">
+                                                    <h6 class="text-uppercase lead">✗ Not Required</h6>
+                                                    <div id="travel-unrequired">
+                                                    
+                                                    </div>
+                                                </div>
+                                            </div>    
+                                            
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="collapse multi-collapse" id="healthMeasuresCard">
+                                            <div class="card card-body">
+                                                <h6>Health Measures</h6>
+                                            <ul id="health-response-data">
+                                            </ul>    
+                                        </div>
+                                        </div>
+                                        </div>
+                                        </div>
+
+                                    </div>
+                                   
+                                    <div class="col-6 d-none">
+                                        <h6>Health Measures</h6>
+                                        <ul id="health-response-data">
+                                        </ul>
+                                    </div>
+                                    <div class="col-6 d-none">
+                                        <h6>Economic Responses</h6>
+                                        <ul id="economic-response-data">
+                                        </ul>
+                                    </div>
+                                    <div class="col-6 d-none">
+                                        <h6>Other Responses</h6>
+                                        <ul id="other-response-data">
+                                        </ul> 
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-12 col-md-6 no-data-available d-none">
+                        <div class="col-12 no-data-available d-none">
                             <p class="lead text-danger">No Data Available</p>
                         </div>
                     </div>
@@ -232,6 +274,7 @@
             <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+            <script src="https://kit.fontawesome.com/7268da00b7.js" crossorigin="anonymous"></script>
             <!-- Local js -->
             <script src="assets/js/oxCGRT.js"></script>
         </body>

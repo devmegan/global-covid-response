@@ -48,7 +48,8 @@ function setResponseData(oxCGRTResponse, dayDelta) {
     let economicResponses = ""
     let otherResponses = ""
     let healthResponses = ""
-    let travelResponses = ""
+    let travelRequired = ""
+    let travelUnrequired = ""
     let deaths = ""
     if (!oxCGRTResponse.stringencyData.msg){
         $(".data-required").show();
@@ -58,15 +59,21 @@ function setResponseData(oxCGRTResponse, dayDelta) {
         } else {
             $(".day-delta").text(dayDelta + " days")
         }
-        
+        let policyResponse = oxCGRTResponse.policyActions
         for (i = 0; i < oxCGRTResponse.policyActions.length; i++) {
-            if (oxCGRTResponse.policyActions[i].policy_value_display_field != "USD Value"){
-                if (oxCGRTResponse.policyActions[i].policy_type_code.charAt(0) == "E"){
-                    economicResponses += "<li>" + oxCGRTResponse.policyActions[i].policy_type_display + ": <small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></li>";
-                } else if (oxCGRTResponse.policyActions[i].policy_type_code.charAt(0) == "H"){
-                    healthResponses += "<li>" + oxCGRTResponse.policyActions[i].policy_type_display + ": <small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></li>";
-                } else if (oxCGRTResponse.policyActions[i].policy_type_code.charAt(0) == "C"){
-                    travelResponses += "<li>" + oxCGRTResponse.policyActions[i].policy_type_display + ": <small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></li>";
+            policyDetail = oxCGRTResponse.policyActions[i].policy_value_display_field.toLowerCase();
+            if (policyDetail != "usd value"){
+                if (policyResponse[i].policy_type_code.charAt(0) == "E"){
+                    economicResponses += "<li>" + policyResponse[i].policy_type_display + ": <small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></li>";
+                } else if (policyResponse[i].policy_type_code.charAt(0) == "H"){
+                    healthResponses += "<li>" + policyResponse[i].policy_type_display + ": <small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></li>";
+                } else if (policyResponse[i].policy_type_code.charAt(0) == "C"){
+                    if (policyDetail == "no restrictions" || policyDetail == "no measures" || policyDetail == "not required"){
+                        travelUnrequired += "<p class='mb-0'> " + oxCGRTResponse.policyActions[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
+              
+                    } else {
+                        travelRequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
+                    }
                 } else {
                     otherResponses += "<li>" + oxCGRTResponse.policyActions[i].policy_type_display + ": <small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></li>";
                 }
@@ -79,7 +86,8 @@ function setResponseData(oxCGRTResponse, dayDelta) {
     }
     $("#economic-response-data").html(economicResponses);
     $("#health-response-data").html(healthResponses);
-    $("#travel-response-data").html(travelResponses);
+    $("#travel-required").html(travelRequired);
+    $("#travel-unrequired").html(travelUnrequired);
     $("#other-response-data").html(otherResponses);
     $("#deathsInt").text(oxCGRTResponse.stringencyData.deaths.toLocaleString())
     $("#confirmedInt").text(oxCGRTResponse.stringencyData.confirmed.toLocaleString())
