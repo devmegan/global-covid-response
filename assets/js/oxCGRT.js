@@ -30,6 +30,7 @@ function getOxCGRTData(countryCode, countryName, dayDelta) {
     xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             let oxCGRTResponse = (JSON.parse(this.responseText));
+            console.log(oxCGRTResponse)
             if (oxCGRTResponse.policyActions[0].policy_type_code == "NONE" && dayDelta < 14){ 
                 dayDelta += 1
                 getOxCGRTData(countryCode, countryName, dayDelta);
@@ -76,7 +77,7 @@ function setResponseData(oxCGRTResponse, dayDelta) {
     }
     $("#economic-response-data").html(economicResponses);
     $("#health-response-data").html(economicResponses);
-    $("#travel-response-data").html(otherResponses);
+    $("#travel-response-data").html(travelResponses);
     $("#other-response-data").html(otherResponses);
     $("#deathsInt").text(oxCGRTResponse.stringencyData.deaths)
     $("#confirmedInt").text(oxCGRTResponse.stringencyData.confirmed)
