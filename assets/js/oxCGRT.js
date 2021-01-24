@@ -7,6 +7,13 @@ $(document).ready(function(){
         var countryName=$("#countrySelect option:selected").text();
         getOxCGRTData(countryCode, countryName, 1);
     });
+    
+    // handle collapsing of response cards
+    $(".response-toggle-btn").click(function(){
+        let responseID = $(this).attr("id");
+        $(`.response-card:not(#${responseID}Card)`).collapse('hide');
+        $(`#${responseID}Card`).collapse('show');
+    })
 });
 
 //function calls country data from oxCGRT API
