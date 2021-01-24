@@ -4,7 +4,6 @@
             <!-- Required meta tags -->
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
             <!-- Bootstrap CSS -->
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
             <!-- Local CSS -->
@@ -13,11 +12,13 @@
             <title>🌎 Global Covid Response</title>
         </head>
         <body>
+            <!-- Jumbotron -->
             <header>
-                <div class="jumbotron jumbotron-fluid">
+                <div class="jumbotron jumbotron-fluid mb-0">
                     <div class="container text-white">
                         <h1 class="display-4">Global Covid Response</h1>
-                        <h6 class="mb-4"><small>🌎  Data from the <a href="https://covidtracker.bsg.ox.ac.uk/" target="_blank" class="text-white"><u>Oxford Coronavirus Government Response Tracker</u></a></small></h6>
+                        <h6 class="mb-4"><small>🌎  Data from the <a href="https://covidtracker.bsg.ox.ac.uk/" target="_blank" class="text-white"><u>Oxford Coronavirus Government Response Tracker API</u></a></small></h6>
+                        <!-- Country ID Select-->
                         <select id="countrySelect" class="custom-select w-25">
                             <option value="GBR" selected>United Kingdom</option>
                             <option value="AFG">Afghanistan</option>
@@ -196,79 +197,71 @@
                     </div>
                 </div>
             </header>
-            <section class="data">
-                <div class="container">
+            <!-- API Data Container -->
+            <section class="data" id="response-container">
+                <div class="container py-4">
                     <div class="row no-gutters">
+                        <!-- Country Data Overview -->
                         <div class="col-2 border-right">
                             <h4 id="countryCode" class="text-uppercase mb-0"></h4>
                             <p class="text-muted"><small>* data from <span class="day-delta"></span> ago</small></p>
                             <p id="deaths" class="lead data-required"><strong><span id="deathsInt" class="text-danger d-block"></span></strong> recorded deaths</p>
                             <p id="confirmed" class="lead data-required"><strong><span id="confirmedInt" class="text-info d-block"></span></strong> positive cases</p>
-                            
                         </div>
+                        <!-- Response Breakdown -->
                         <div class="col-10 data-required">
                             <div class="pl-4">
                                 <div class="row no-gutters">
                                     <div class="col-12">
-                                        <a class="btn btn-info px-4" data-toggle="collapse" href="#travelRestictionsCard" role="button" aria-expanded="false" aria-controls="multiCollapseExample1"><i class="fas fa-road pr-2"></i> Travel Restrictions</a>
-                                        <button class="btn btn-danger px-4" type="button" data-toggle="collapse" data-target="#healthMeasuresCard" aria-expanded="false" aria-controls="multiCollapseExample2"><i class="fas fa-heartbeat pr-2"></i> Health Measures</button>
-                                        <button class="btn btn-success px-4" type="button" data-toggle="collapse" data-target="#economicSupportCard" aria-expanded="false" aria-controls="economicSupportCard"><i class="fas fa-landmark pr-2"></i> Economic Support</button>
+                                        <!-- Response Toggle Buttons-->
+                                        <button class="btn btn-info px-4 response-toggle-btn" id="travelRestictions" type="button" data-toggle="collapse" data-target="#travelRestictionsCard" role="button" aria-expanded="false" aria-controls="travelRestictionsCard"><i class="fas fa-road pr-2"></i> Travel Restrictions</button>
+                                        <button class="btn btn-danger px-4 response-toggle-btn" id="healthMeasures" type="button" data-toggle="collapse" data-target="#healthMeasuresCard" aria-expanded="false" aria-controls="healthMeasuresCard"><i class="fas fa-heartbeat pr-2"></i> Health Measures</button>
+                                        <button class="btn btn-success px-4 response-toggle-btn" id="economicSupport" type="button" data-toggle="collapse" data-target="#economicSupportCard" aria-expanded="false" aria-controls="economicSupportCard"><i class="fas fa-landmark pr-2"></i> Economic Support</button>
                                     </div>
+                                    <!-- Response Toggle Cards -->
                                     <div class="col-12">
-                                        <div class="collapse mt-3" id="travelRestictionsCard">
+                                        <!-- Travel Restrictions Card -->
+                                        <div class="collapse response-card mt-3" id="travelRestictionsCard">
                                             <div class="card card-body">
-                                            <h4 class="text-info"><i class="fas fa-road"></i> Travel Restrictions</h4>
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <div id="travel-required">
+                                                <h4 class="text-info"><i class="fas fa-road"></i> Travel Restrictions</h4>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div id="travel-required">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-6 text-muted">
-                                                    <h6 class="text-uppercase lead">✗ Not Required</h6>
-                                                    <div id="travel-unrequired">
-                                                    
+                                                    <div class="col-6 text-muted">
+                                                        <h6 class="text-uppercase lead">✗ Not Required</h6>
+                                                        <div id="travel-unrequired">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>    
-                                            
-                                            </div>
+                                                </div>    
                                             </div>
                                         </div>
-                                        <div class="collapse multi-collapse" id="healthMeasuresCard">
+                                        <!-- Health Measures Card -->
+                                        <div class="collapse response-card mt-3" id="healthMeasuresCard">
                                             <div class="card card-body">
                                                 <h6>Health Measures</h6>
-                                            <ul id="health-response-data">
-                                            </ul>    
+                                                <ul id="health-response-data">
+                                                </ul>    
+                                            </div>
                                         </div>
+                                        <!-- Economic Support Card -->
+                                        <div class="collapse response-card mt-3" id="economicSupportCard">
+                                            <div class="card card-body">
+                                                <h6>Economic Support</h6>
+                                                <ul id="economic-response-data">
+                                                </ul>    
+                                            </div>
                                         </div>
-                                        </div>
-                                        </div>
-
-                                    </div>
-                                   
-                                    <div class="col-6 d-none">
-                                        <h6>Health Measures</h6>
-                                        <ul id="health-response-data">
-                                        </ul>
-                                    </div>
-                                    <div class="col-6 d-none">
-                                        <h6>Economic Responses</h6>
-                                        <ul id="economic-response-data">
-                                        </ul>
-                                    </div>
-                                    <div class="col-6 d-none">
-                                        <h6>Other Responses</h6>
-                                        <ul id="other-response-data">
-                                        </ul> 
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- No Response Data Available-->
                         <div class="col-12 no-data-available d-none">
                             <p class="lead text-danger">No Data Available</p>
                         </div>
                     </div>
-                </div>
             </section>
             <!-- jQuery, Popper.js, Bootstrap JS -->
             <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

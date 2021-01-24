@@ -3,3 +3,7 @@
 .jumbotron {
     background-image: url("https://i.ytimg.com/vi/XBPjVzSoepo/maxresdefault.jpg");
 }
+#response-container {
+    background-color: #f4f4f4;
+    min-height: 100vh;
+}
