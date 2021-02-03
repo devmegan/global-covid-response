@@ -52,13 +52,16 @@ function getOxCGRTData(countryCode, countryName, dayDelta) {
 }
 function setResponseData(oxCGRTResponse, dayDelta) {
     var i; 
-    let economicResponses = ""
+    let economicRequired = ""
+    let economicUnrequired = ""
     let otherResponses = ""
-    let healthResponses = ""
+    let healthRequired = ""
+    let healthUnrequired = ""
     let travelRequired = ""
     let travelUnrequired = ""
     let deaths = ""
     if (!oxCGRTResponse.stringencyData.msg){
+        $("#travelRestictionsCard").collapse("show");
         $(".data-required").show();
         $(".no-data-available").addClass("d-none")
         if (dayDelta = 1){
@@ -66,23 +69,31 @@ function setResponseData(oxCGRTResponse, dayDelta) {
         } else {
             $(".day-delta").text(dayDelta + " days")
         }
+        $("#deathsInt").text(oxCGRTResponse.stringencyData.deaths.toLocaleString())
+        $("#confirmedInt").text(oxCGRTResponse.stringencyData.confirmed.toLocaleString())
         let policyResponse = oxCGRTResponse.policyActions
         for (i = 0; i < oxCGRTResponse.policyActions.length; i++) {
             policyDetail = oxCGRTResponse.policyActions[i].policy_value_display_field.toLowerCase();
-            if (policyDetail != "usd value"){
-                if (policyResponse[i].policy_type_code.charAt(0) == "E"){
-                    economicResponses += "<li>" + policyResponse[i].policy_type_display + ": <small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></li>";
-                } else if (policyResponse[i].policy_type_code.charAt(0) == "H"){
-                    healthResponses += "<li>" + policyResponse[i].policy_type_display + ": <small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></li>";
-                } else if (policyResponse[i].policy_type_code.charAt(0) == "C"){
-                    if (policyDetail == "no restrictions" || policyDetail == "no measures" || policyDetail == "not required"){
-                        travelUnrequired += "<p class='mb-0'> " + oxCGRTResponse.policyActions[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
-              
-                    } else {
-                        travelRequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
-                    }
+            if (policyResponse[i].policy_type_code.charAt(0) == "E"){
+                // handle economy policy response 
+                if (policyDetail == "usd value" || policyDetail == "no measures" || policyDetail == "not required"){
+                    economicUnrequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small> Currently under review. </small></p>";
                 } else {
-                    otherResponses += "<li>" + oxCGRTResponse.policyActions[i].policy_type_display + ": <small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></li>";
+                    economicRequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
+                }
+            } else if (policyResponse[i].policy_type_code.charAt(0) == "H" && policyDetail != "usd value"){
+                // handle health policy response 
+                if (policyDetail == "no availability" || policyDetail == "no measures" || policyDetail == "not required"){
+                    healthUnrequired += "<p class='mb-0'> " + oxCGRTResponse.policyActions[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
+                } else {
+                    healthRequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
+                }
+            } else if (policyResponse[i].policy_type_code.charAt(0) == "C" && policyDetail != "usd value") {
+                // handle travel policy response
+                if (policyDetail == "no restrictions" || policyDetail == "no measures" || policyDetail == "not required"){
+                    travelUnrequired += "<p class='mb-0'> " + oxCGRTResponse.policyActions[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
+                } else {
+                    travelRequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
                 }
             }
         }
@@ -91,11 +102,26 @@ function setResponseData(oxCGRTResponse, dayDelta) {
         $(".data-required").hide();
         $(".no-data-available").removeClass("d-none")
     }
-    $("#economic-response-data").html(economicResponses);
-    $("#health-response-data").html(healthResponses);
+    $("#economic-response-data").html(economicRequired);
+    $("#health-required").html(healthRequired);
     $("#travel-required").html(travelRequired);
-    $("#travel-unrequired").html(travelUnrequired);
-    $("#other-response-data").html(otherResponses);
-    $("#deathsInt").text(oxCGRTResponse.stringencyData.deaths.toLocaleString())
-    $("#confirmedInt").text(oxCGRTResponse.stringencyData.confirmed.toLocaleString())
+    $("#economic-required").html(economicRequired);
+    if (!travelUnrequired){
+        $("#travel-unrequired-container").hide();
+    } else {
+        $("#travel-unrequired").html(travelUnrequired);
+        $("#travel-unrequired-container").show();
+    }
+    if (!healthUnrequired){
+        $("#health-unrequired-container").hide();
+    } else {
+        $("#health-unrequired").html(healthUnrequired);
+        $("#health-unrequired-container").show();
+    }
+    if (!economicUnrequired){
+        $("#economic-unrequired-container").hide();
+    } else {
+        $("#economic-unrequired").html(economicUnrequired);
+        $("#economic-unrequired-container").show();
+    }
 }
