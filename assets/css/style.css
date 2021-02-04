@@ -3,7 +3,7 @@
 .jumbotron {
     background-image: url("https://i.ytimg.com/vi/XBPjVzSoepo/maxresdefault.jpg");
     background-size: cover;
-     opacity: 0.85;
+     opacity: 0.95;
 }
 #response-container {
     background-color: #f4f4f4;
