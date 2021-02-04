@@ -10,6 +10,42 @@
     min-height: 100vh;
 }
 
+/* Buttons */
+.btn-heather { 
+    background-color: #793E65;
+    color: #f4f4f4;
+}
+
+.btn-heather:hover { 
+    background-color: #5E314F;
+}
+
+.btn-rose {
+    background-color: #E36367;
+    color: #f4f4f4;
+}
+.btn-rose:hover {
+    background-color: #DD4045;
+}
+.btn-grass {
+    background-color: #3F8D5E;
+    color: #f4f4f4;
+}
+.btn-grass:hover {
+    background-color: #33714B;
+}
+
+/* font colours */
+.text-heather {
+    color: #793E65;
+}
+.text-rose {
+    color: #E36367;
+}
+.text-grass {
+    color: #3F8D5E;
+}
+
 /* media queries */
 @media only screen and (min-width : 768px) {
     #country-data-overview {
