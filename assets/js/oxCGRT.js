@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    // call GBR data when page loads
     countryCode = "GBR"
     countryName = "United Kingdom"
     getOxCGRTData(countryCode, countryName, 1);
@@ -50,6 +51,7 @@ function getOxCGRTData(countryCode, countryName, dayDelta) {
     xhr.send();
     $("#countryCode").text(countryName)
 }
+
 function setResponseData(oxCGRTResponse, dayDelta) {
     var i; 
     let economicRequired = ""
@@ -60,6 +62,7 @@ function setResponseData(oxCGRTResponse, dayDelta) {
     let travelRequired = ""
     let travelUnrequired = ""
     let deaths = ""
+    // set the number of days ago data is from
     if (!oxCGRTResponse.stringencyData.msg){
         $("#travelRestictionsCard").collapse("show");
         $(".data-required").show();
@@ -69,15 +72,17 @@ function setResponseData(oxCGRTResponse, dayDelta) {
         } else {
             $(".day-delta").text(dayDelta + " days")
         }
+        // inject infection/fatality figures into country data
         $("#deathsInt").text(oxCGRTResponse.stringencyData.deaths.toLocaleString())
         $("#confirmedInt").text(oxCGRTResponse.stringencyData.confirmed.toLocaleString())
+        // handle policy responses into different fields
         let policyResponse = oxCGRTResponse.policyActions
         for (i = 0; i < oxCGRTResponse.policyActions.length; i++) {
             policyDetail = oxCGRTResponse.policyActions[i].policy_value_display_field.toLowerCase();
             if (policyResponse[i].policy_type_code.charAt(0) == "E"){
                 // handle economy policy response 
                 if (policyDetail == "usd value" || policyDetail == "no measures" || policyDetail == "not required"){
-                    economicUnrequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small> Currently under review. </small></p>";
+                    economicUnrequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small> Currently under review</small></p>";
                 } else {
                     economicRequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
                 }
@@ -102,6 +107,7 @@ function setResponseData(oxCGRTResponse, dayDelta) {
         $(".data-required").hide();
         $(".no-data-available").removeClass("d-none")
     }
+    // inject responses into response cards
     $("#economic-response-data").html(economicRequired);
     $("#health-required").html(healthRequired);
     $("#travel-required").html(travelRequired);
