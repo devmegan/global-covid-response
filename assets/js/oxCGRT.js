@@ -2,11 +2,13 @@ $(document).ready(function(){
     // call GBR data when page loads
     countryCode = "GBR"
     countryName = "United Kingdom"
+    $("#countryCode").html(countryName)
     getOxCGRTData(countryCode, countryName, 1);
-    $("#countrySelect").on('change',function(){
+    $("#countrySelect").change(function(){
         var countryCode=$("#countrySelect").val();
         var countryName=$("#countrySelect option:selected").text();
         getOxCGRTData(countryCode, countryName, 1);
+        $("#countryCode").html(countryName)
     });
     
     // handle collapsing of response cards
@@ -49,7 +51,6 @@ function getOxCGRTData(countryCode, countryName, dayDelta) {
     };
     xhr.open("GET", url);
     xhr.send();
-    $("#countryCode").text(countryName)
 }
 
 function setResponseData(oxCGRTResponse, dayDelta) {

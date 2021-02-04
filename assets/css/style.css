@@ -51,4 +51,7 @@
     #country-data-overview {
         border-right: 1px solid rgba(0,0,0,.1);
     }
+    #countrySelect { 
+        width: 25% !important;
+    }
 }
