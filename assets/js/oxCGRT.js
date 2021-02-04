@@ -62,6 +62,7 @@ function setResponseData(oxCGRTResponse, dayDelta) {
     let travelRequired = ""
     let travelUnrequired = ""
     let deaths = ""
+    let stringency = ""
     // set the number of days ago data is from
     if (!oxCGRTResponse.stringencyData.msg){
         $("#travelRestictionsCard").collapse("show");
@@ -75,6 +76,7 @@ function setResponseData(oxCGRTResponse, dayDelta) {
         // inject infection/fatality figures into country data
         $("#deathsInt").text(oxCGRTResponse.stringencyData.deaths.toLocaleString())
         $("#confirmedInt").text(oxCGRTResponse.stringencyData.confirmed.toLocaleString())
+        $("#stringencyFloat").text(oxCGRTResponse.stringencyData.stringency_actual);
         // handle policy responses into different fields
         let policyResponse = oxCGRTResponse.policyActions
         for (i = 0; i < oxCGRTResponse.policyActions.length; i++) {
