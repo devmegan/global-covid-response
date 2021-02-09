@@ -65,19 +65,16 @@ function setResponseData(oxCGRTResponse, dayDelta) {
     let deaths = ""
     let stringency = ""
     // set the number of days ago data is from
-    if (!oxCGRTResponse.stringencyData.msg){
+    if (oxCGRTResponse.policyActions){
         $("#travelRestictionsCard").collapse("show");
         $(".data-required").show();
+        $(".stringency-required").show();
         $(".no-data-available").addClass("d-none")
         if (dayDelta = 1){
             $(".day-delta").text(dayDelta + " day")
         } else {
             $(".day-delta").text(dayDelta + " days")
         }
-        // inject infection/fatality figures into country data
-        $("#deathsInt").text(oxCGRTResponse.stringencyData.deaths.toLocaleString())
-        $("#confirmedInt").text(oxCGRTResponse.stringencyData.confirmed.toLocaleString())
-        $("#stringencyFloat").text(oxCGRTResponse.stringencyData.stringency_actual);
         // handle policy responses into different fields
         let policyResponse = oxCGRTResponse.policyActions
         for (i = 0; i < oxCGRTResponse.policyActions.length; i++) {
@@ -109,6 +106,14 @@ function setResponseData(oxCGRTResponse, dayDelta) {
         // no country data available
         $(".data-required").hide();
         $(".no-data-available").removeClass("d-none")
+    }
+    if (!oxCGRTResponse.stringencyData.msg == "Data unavailable"){
+        // inject infection/fatality figures into country data
+        $("#deathsInt").text(oxCGRTResponse.stringencyData.deaths.toLocaleString())
+        $("#confirmedInt").text(oxCGRTResponse.stringencyData.confirmed.toLocaleString())
+        $("#stringencyFloat").text(oxCGRTResponse.stringencyData.stringency_actual);
+    } else {
+        $(".stringency-required").hide();
     }
     // inject responses into response cards
     $("#economic-response-data").html(economicRequired);
