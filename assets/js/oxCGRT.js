@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    // call GBR data when page loads
+    // call GBR data on page load
     countryCode = "GBR"
     countryName = "United Kingdom"
     $("#countryCode").html(countryName)
@@ -41,8 +41,9 @@ function getOxCGRTData(countryCode, countryName, dayDelta) {
         if (this.readyState == 4 && this.status == 200) {
             let oxCGRTResponse = (JSON.parse(this.responseText));
             console.log(oxCGRTResponse)
-            if (oxCGRTResponse.policyActions[0].policy_type_code == "NONE" && dayDelta < 14){ 
+            if ((oxCGRTResponse.policyActions[0].policy_type_code == "NONE" || oxCGRTResponse.stringencyData.msg == "Data unavailable") && dayDelta < 14){ 
                 dayDelta += 1
+                console.log(dayDelta)
                 getOxCGRTData(countryCode, countryName, dayDelta);
             } else {
                 setResponseData(oxCGRTResponse, dayDelta); 
@@ -70,7 +71,7 @@ function setResponseData(oxCGRTResponse, dayDelta) {
         $(".data-required").show();
         $(".stringency-required").show();
         $(".no-data-available").addClass("d-none")
-        if (dayDelta = 1){
+        if (dayDelta == 1){
             $(".day-delta").text(dayDelta + " day")
         } else {
             $(".day-delta").text(dayDelta + " days")
@@ -107,11 +108,12 @@ function setResponseData(oxCGRTResponse, dayDelta) {
         $(".data-required").hide();
         $(".no-data-available").removeClass("d-none")
     }
-    if (!oxCGRTResponse.stringencyData.msg == "Data unavailable"){
+    if (!oxCGRTResponse.stringencyData.msg){
         // inject infection/fatality figures into country data
+        $(".stringency-required").show();
         $("#deathsInt").text(oxCGRTResponse.stringencyData.deaths.toLocaleString())
         $("#confirmedInt").text(oxCGRTResponse.stringencyData.confirmed.toLocaleString())
-        $("#stringencyFloat").text(oxCGRTResponse.stringencyData.stringency_actual);
+        $("#stringencyFloat").text(oxCGRTResponse.stringencyData.stringency);
     } else {
         $(".stringency-required").hide();
     }
