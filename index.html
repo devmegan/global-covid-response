@@ -1,7 +1,7 @@
 <!doctype html>
     <html lang="en">
         <head>
-            <!-- Required meta tags -->
+            <!-- Meta tags -->
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
             <!-- Bootstrap CSS -->
@@ -16,7 +16,7 @@
                 <div class="jumbotron jumbotron-fluid mb-0">
                     <div class="container text-white">
                         <h1 class="display-4">Global Covid Response</h1>
-                        <h6 class="mb-4"><small>🌎  Data from the <a href="https://covidtracker.bsg.ox.ac.uk/" target="_blank" class="text-white"><u>Oxford Coronavirus Government Response Tracker API</u></a></small></h6>
+                        <h6 class="mb-4"><small>🌎 Data from the <a href="https://covidtracker.bsg.ox.ac.uk/" target="_blank" class="text-white"><u>Oxford Coronavirus Government Response Tracker API</u></a></small></h6>
                         <!-- Country ID Select-->
                         <select id="countrySelect" class="custom-select w-100">
                             <option value="GBR" selected>United Kingdom</option>
@@ -203,18 +203,20 @@
                         <!-- Country Data Overview -->
                         <div class="col-12 col-md-4 col-lg-2" id="country-data-overview">
                             <h4 id="countryCode" class="text-uppercase mb-0"></h4>
-                            <p class="text-muted data-required"><small>* data from <span class="day-delta"></span> ago</small></p>
-                            <p id="deaths" class="lead data-required stringency-required"><strong><span id="deathsInt" class="text-rose d-block"></span></strong> recorded deaths</p>
-                            <p id="confirmed" class="lead data-required stringency-required"><strong><span id="confirmedInt" class="text-grass d-block"></span></strong> positive cases</p>
-                            <p id="stringency" class="lead data-required stringency-required" data-toggle="tooltip" data-placement="top" title="The Stringency Index measures the strictness of government restrictions out of 100"><strong><span class="d-block text-heather"><span id="stringencyFloat"></span>/100</span></strong>stringency<sup>ⓘ</sup></p>
+                            <span class="data-required">
+                                <p class="text-muted"><small>* data from <span class="day-delta"></span> ago</small></p>
+                                <p id="deaths" class="lead stringency-required"><strong><span id="deathsInt" class="text-rose d-block"></span></strong> recorded deaths</p>
+                                <p id="confirmed" class="lead stringency-required"><strong><span id="confirmedInt" class="text-grass d-block"></span></strong> positive cases</p>
+                                <p id="stringency" class="lead stringency-required" data-toggle="tooltip" data-placement="top" title="The Stringency Index measures the strictness of government restrictions out of 100"><strong><span class="d-block text-heather"><span id="stringencyFloat"></span>/100</span></strong>stringency<sup>ⓘ</sup></p>
+                            </span>
                             <hr class="d-block d-md-none">
                         </div>
                         <!-- Response Breakdown -->
                         <div class="col-12 col-md-8 col-lg-10 data-required">
                             <div class="pl-md-4">
                                 <div class="row no-gutters">
+                                    <!-- Response Toggle Buttons-->
                                     <div class="col-12">
-                                        <!-- Response Toggle Buttons-->
                                         <button class="btn btn-heather px-4 response-toggle-btn" id="travelRestictions" type="button" data-toggle="collapse" data-target="#travelRestictionsCard" role="button" aria-expanded="false" aria-controls="travelRestictionsCard">
                                             <i class="fas fa-road pr-2"></i> <span class="d-none d-sm-inline">Travel</span><span class="d-none d-lg-inline"> Restrictions</span>
                                         </button>
@@ -289,7 +291,7 @@
                     </div>
                 </div>
             </section>
-            <!-- jQuery, Popper.js, Bootstrap JS -->
+            <!-- jQuery, Popper, Bootstrap js -->
             <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
