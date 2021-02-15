@@ -1,17 +1,19 @@
 $(document).ready(function(){
     // call GBR data on page load
-    countryCode = "GBR"
-    countryName = "United Kingdom"
-    $("#countryCode").html(countryName)
+    countryCode = "GBR";
+    countryName = "United Kingdom";
+    $("#countryCode").html(countryName);
     getOxCGRTData(countryCode, countryName, 1);
+
+    // set new country code/name values on change
     $("#countrySelect").change(function(){
         var countryCode=$("#countrySelect").val();
         var countryName=$("#countrySelect option:selected").text();
+        $("#countryCode").html(countryName);
         getOxCGRTData(countryCode, countryName, 1);
-        $("#countryCode").html(countryName)
     });
     
-    // handle collapsing of response cards
+    // handle custom collapsing of response cards
     $(".response-toggle-btn").click(function(){
         let responseID = $(this).attr("id");
         $(`.response-card:not(#${responseID}Card)`).collapse('hide');
@@ -19,104 +21,113 @@ $(document).ready(function(){
     })
 });
 
-//function calls country data from oxCGRT API
+/* calls country covid response data from OxCGRT API */
 function getOxCGRTData(countryCode, countryName, dayDelta) {
+    // prep dates/url for AJAX call 
     var dateToday = new Date();
     var dateYesterday = new Date();
     dateYesterday.setDate(dateToday.getDate() - dayDelta);
 
-    var year = dateYesterday.getFullYear();
-    var month = dateYesterday.getMonth() + 1
+    let year = dateYesterday.getFullYear();
+    let month = dateYesterday.getMonth() + 1;
     if (month < 10) {
         month = '0' + month;
     }
-    var day = dateYesterday.getDate();
-    if (day < 10) 
+    let day = dateYesterday.getDate();
+    if (day < 10) {
         day = '0' + day 
-    
+    }
+
     var xhr = new XMLHttpRequest();
     var url = `https://covidtrackerapi.bsg.ox.ac.uk/api/v2/stringency/actions/${countryCode}/${year}-${month}-${day}`;
 
+    /* handle OxCGRT API response */
     xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            // API response succesful
+            // console.log(oxCGRTResponse);
             let oxCGRTResponse = (JSON.parse(this.responseText));
-            console.log(oxCGRTResponse)
-            if ((oxCGRTResponse.policyActions[0].policy_type_code == "NONE" || oxCGRTResponse.stringencyData.msg == "Data unavailable") && dayDelta < 14){ 
-                dayDelta += 1
-                console.log(dayDelta)
+            if ((oxCGRTResponse.policyActions[0].policy_type_code == "NONE" || oxCGRTResponse.stringencyData.msg == "Data unavailable") && dayDelta < 30){ 
+                // policy/stringency data missing from returned object. Try previous day, for past 30 days. 
+                dayDelta += 1;
                 getOxCGRTData(countryCode, countryName, dayDelta);
             } else {
+                // full data returned, or data is 30 days old (so just use what's available)
                 setResponseData(oxCGRTResponse, dayDelta); 
             }
         }
     };
+
     xhr.open("GET", url);
     xhr.send();
 }
 
-function setResponseData(oxCGRTResponse, dayDelta) {
-    var i; 
-    let economicRequired = ""
-    let economicUnrequired = ""
-    let otherResponses = ""
-    let healthRequired = ""
-    let healthUnrequired = ""
-    let travelRequired = ""
-    let travelUnrequired = ""
-    let deaths = ""
-    let stringency = ""
-    // set the number of days ago data is from
-    if (oxCGRTResponse.policyActions){
+/* injects resposne data from API call into the HTML */
+function setResponseData(oxCGRTResponse, dayDelta) { 
+
+    let economicRequired = "";
+    let economicUnrequired = "";
+    let healthRequired = "";
+    let healthUnrequired = "";
+    let travelRequired = "";
+    let travelUnrequired = "";
+    let policyResponse = oxCGRTResponse.policyActions;
+
+    if (policyResponse){
         $("#travelRestictionsCard").collapse("show");
         $(".data-required").show();
         $(".stringency-required").show();
-        $(".no-data-available").addClass("d-none")
+        $(".no-data-available").addClass("d-none");
+
         if (dayDelta == 1){
-            $(".day-delta").text(dayDelta + " day")
+            $(".day-delta").text(dayDelta + " day");
         } else {
-            $(".day-delta").text(dayDelta + " days")
+            $(".day-delta").text(dayDelta + " days");
         }
+
         // handle policy responses into different fields
-        let policyResponse = oxCGRTResponse.policyActions
-        for (i = 0; i < oxCGRTResponse.policyActions.length; i++) {
-            policyDetail = oxCGRTResponse.policyActions[i].policy_value_display_field.toLowerCase();
-            if (policyResponse[i].policy_type_code.charAt(0) == "E"){
+        for (let i = 0; i < policyResponse.length; i++) {
+            let policyDetail = policyResponse[i].policy_value_display_field.toLowerCase();
+            let policyLetterCode = policyResponse[i].policy_type_code.charAt(0);
+            if (policyLetterCode == "E"){
                 // handle economy policy response 
                 if (policyDetail == "usd value" || policyDetail == "no measures" || policyDetail == "not required"){
                     economicUnrequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small> Currently under review</small></p>";
                 } else {
-                    economicRequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
+                    economicRequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small>" + policyResponse[i].policy_value_display_field + "</small></p>";
                 }
-            } else if (policyResponse[i].policy_type_code.charAt(0) == "H" && policyDetail != "usd value"){
+            } else if (policyLetterCode == "H" && policyDetail != "usd value"){
                 // handle health policy response 
                 if (policyDetail == "no availability" || policyDetail == "no measures" || policyDetail == "not required"){
-                    healthUnrequired += "<p class='mb-0'> " + oxCGRTResponse.policyActions[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
+                    healthUnrequired += "<p class='mb-0'> " + policyResponse[i].policy_type_display + "</p><p><small>" + policyResponse[i].policy_value_display_field + "</small></p>";
                 } else {
-                    healthRequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
+                    healthRequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small>" + policyResponse[i].policy_value_display_field + "</small></p>";
                 }
-            } else if (policyResponse[i].policy_type_code.charAt(0) == "C" && policyDetail != "usd value") {
+            } else if (policyLetterCode == "C" && policyDetail != "usd value") {
                 // handle travel policy response
                 if (policyDetail == "no restrictions" || policyDetail == "no measures" || policyDetail == "not required"){
-                    travelUnrequired += "<p class='mb-0'> " + oxCGRTResponse.policyActions[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
+                    travelUnrequired += "<p class='mb-0'> " + policyResponse[i].policy_type_display + "</p><p><small>" + policyResponse[i].policy_value_display_field + "</small></p>";
                 } else {
-                    travelRequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small>" + oxCGRTResponse.policyActions[i].policy_value_display_field + "</small></p>";
+                    travelRequired += "<p class='mb-0'>" + policyResponse[i].policy_type_display + "</p><p><small>" + policyResponse[i].policy_value_display_field + "</small></p>";
                 }
             }
         }
     } else {
         // no country data available
         $(".data-required").hide();
-        $(".no-data-available").removeClass("d-none")
+        $(".no-data-available").removeClass("d-none");
     }
     if (!oxCGRTResponse.stringencyData.msg){
         // inject infection/fatality figures into country data
         $(".stringency-required").show();
-        $("#deathsInt").text(oxCGRTResponse.stringencyData.deaths.toLocaleString())
-        $("#confirmedInt").text(oxCGRTResponse.stringencyData.confirmed.toLocaleString())
+        $("#deathsInt").text(oxCGRTResponse.stringencyData.deaths.toLocaleString());
+        $("#confirmedInt").text(oxCGRTResponse.stringencyData.confirmed.toLocaleString());
         $("#stringencyFloat").text(oxCGRTResponse.stringencyData.stringency);
     } else {
+        // hide country data if not available
         $(".stringency-required").hide();
     }
+
     // inject responses into response cards
     $("#economic-response-data").html(economicRequired);
     $("#health-required").html(healthRequired);
