@@ -46,7 +46,7 @@ function getOxCGRTData(countryCode, countryName, dayDelta) {
         if (this.readyState == 4 && this.status == 200) {
             // API response succesful
             let oxCGRTResponse = (JSON.parse(this.responseText));
-            //console.log(oxCGRTResponse);
+            // console.log(oxCGRTResponse);
             if ((oxCGRTResponse.policyActions[0].policy_type_code == "NONE" || oxCGRTResponse.stringencyData.msg == "Data unavailable") && dayDelta < 30){ 
                 // policy/stringency data missing from returned object. Try previous day, for past 30 days. 
                 dayDelta += 1;
